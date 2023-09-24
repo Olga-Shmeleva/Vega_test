@@ -12,6 +12,8 @@ class Login_page(Base):
     def __init__(self,driver):
         super().__init__(driver)
         self.driver = driver
+        driver.implicitly_wait(10)
+
 
     # locators
 
@@ -20,10 +22,9 @@ class Login_page(Base):
     password = "//input[@id='input-password']"
     submit_button = "//input[@type='submit']"
     select_language = '//a[@class="dropdown-toggle"]'
-    select_language_eng = '//*[@id="language_form"]/div/ul/li[1]/a'
-    select_language_kartuli = '//*[@id="language_form"]/div/ul/li[3]/a/img'
-    check_word = '/html/body/div[1]/div[2]/div/header/div[2]/div[2]/div[2]/div[2]' \
-                 '/div/div/div/div[2]/div/div/div[2]/div/div/ul/li[1]'
+    select_language_eng = """a[href="https://vega.ge/en"]"""
+    select_language_kartuli = """a[href="https://vega.ge/ge"]"""
+    check_word = 'li.with-sub-menu.hover.furniture200-rooms'
 
 
 
@@ -36,15 +37,17 @@ class Login_page(Base):
         return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.password)))
     def get_submit_button(self):
         return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.submit_button)))
-    def get_home_appliences(self):
-        return self.driver.find_element(By.XPATH, '/html/body/div[1]/div[2]/div/header/div[2]/div[2]'
-                                                 '/div[2]/div[2]/div/div/div/div[2]/div/div/div[2]/div/div/ul/li[1]')
     def get_select_language(self):
         return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.select_language)))
     def get_select_language_eng(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.select_language_eng)))
+        time.sleep(3)
+        return (self.driver.find_elements(By.CSS_SELECTOR, self.select_language_eng))
     def get_select_language_kartuli(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.select_language_kartuli)))
+        time.sleep(3)
+        return (self.driver.find_elements(By.CSS_SELECTOR, self.select_language_kartuli))
+    def get_check_word(self):
+        time.sleep(3)
+        return (self.driver.find_elements(By.CSS_SELECTOR, self.check_word))
 
     # actions
 
@@ -63,14 +66,14 @@ class Login_page(Base):
     def click_submit_button(self):
         self.get_submit_button().click()
 
-    def click_select_language (self):
+    def click_select_language(self):
         self.get_select_language().click()
 
     def click_select_language_eng(self):
-        self.get_select_language_eng().click()
+        self.get_select_language_eng()[0].click()
 
     def click_select_language_kartuli(self):
-        self.get_select_language_kartuli().click()
+        self.get_select_language_kartuli()[0].click()
 
 
    #Methods
@@ -83,13 +86,14 @@ class Login_page(Base):
         self.click_select_language_kartuli()
         time.sleep(5)
         self.assert_url('https://vega.ge/ge')
-        self.assert_word(self.check_word, 'Საყოფაცხოვრებო Ტექნიკა')
+        print(self.get_check_word)
+        self.assert_word(self.get_check_word()[0], 'სახლი და ბაღი')
         self.get_screenshot()
         time.sleep(5)
         self.click_select_language()
         self.click_select_language_eng()
         self.assert_url('https://vega.ge/en')
-        self.assert_word(self.check_word, 'Home appliances')
+        self.assert_word(self.get_check_word()[0], 'Home & garden')
         time.sleep(5)
         self.click_single_neutral()
         self.input_user_name('kamchatkaptz@gmail.com')

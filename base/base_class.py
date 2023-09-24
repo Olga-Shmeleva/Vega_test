@@ -10,6 +10,8 @@ class Base():
 
     def __init__(self, driver):
         self.driver = driver
+        driver.implicitly_wait(10)
+
 
     """method get current url"""
     def get_current_url(self):
@@ -17,8 +19,14 @@ class Base():
         print('current url ' + get_url)
 
     """method assert word"""
+    # def assert_word(self, word, result):
+    #     time.sleep(5)
+    #     value_word = self.driver.find_element(By.CSS_SELECTOR, word).text
+    #     print('value_word =', value_word)
+    #     assert value_word == result
     def assert_word(self, word, result):
-        value_word = WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, word))).text
+        time.sleep(5)
+        value_word = word.text
         print('value_word =', value_word)
         assert value_word == result
 
@@ -27,12 +35,13 @@ class Base():
     def get_screenshot(self):
         now_date = datetime.datetime.utcnow().strftime('%Y.%M.%d.%H.%M.%S')
         name_screenshot = 'save_screenshot' + now_date + '.png'
-        self.driver.get_screenshot_as_file('C:\\Users\\User\\PycharmProjects\\Vega\\screen\\' + name_screenshot)
+        # self.driver.get_screenshot_as_file('C:\\Users\\User\\PycharmProjects\\Vega\\screen\\' + name_screenshot)
 
     """method assert url"""
     def assert_url(self, result):
+        time.sleep(5)
         get_url = self.driver.current_url
-        print('get_url = ',get_url)
+        print('get_url = ', get_url)
         assert get_url == result
         print('good value url, assert_url')
 
@@ -66,18 +75,16 @@ class Base():
         error_dict = {}
         module_name, class_name = self.get_calling_module_name()
         try:
-            element_product = WebDriverWait(self.driver, 30).until(
-                EC.element_to_be_clickable((By.XPATH, locator)))
-            element_product_text = element_product.text
+            element_product = locator.text
         except NoSuchElementException:
-            error_dict.setdefault(locator, "Элемент с локатором не найден")
+            return error_dict.setdefault(locator, "Элемент с локатором не найден")
         except Exception as e:
             error_dict.setdefault(locator, f"Произошла ошибка при поиске элемента с локатором {e}")
         else:
             if class_name == 'My_account_page_1':
-                element_product.click()
+                locator.click()
             else:
-                return element_product_text
+                return element_product
 
 
 

@@ -14,15 +14,17 @@ class Checkout_cart_page(Base):
     def __init__(self,driver):
         super().__init__(driver)
         self.driver = driver
+        driver.implicitly_wait(10)
 
     # locators
-    cart_selected_product_furniture = '//*[@id="cart1"]/div/table/tbody/tr[1]/td[2]'
-    cart_selected_product_appliences = '//*[@id="cart1"]/div/table/tbody/tr[3]/td[2]/a'
-    cart_selected_product_home_and_garden = '//*[@id="cart1"]/div/table/tbody/tr[2]/td[2]/a'
+    cart_selected_product_furniture = 'a[href="https://vega.ge/en/stand-for-tv-vega-x53.html"]'
+    cart_selected_product_appliences = 'a[href="https://vega.ge/en/notebook-lenovo-ideapad-3-17iau7-i3-1215u-173-8gb-' \
+                                       '512gb-gr-82rl005grk.html"]'
+    cart_selected_product_home_and_garden = 'a[href="https://vega.ge/en/bed-cover-vetexus-ntf-2019-bc-220x240.html"]'
 
-    product_furniture_price = '//*[@id="cart1"]/div/table/tbody/tr[1]/td[4]'
-    product_appliences_price = '//*[@id="cart1"]/div/table/tbody/tr[3]/td[4]'
-    product_home_and_garden_price = '//*[@id="cart1"]/div/table/tbody/tr[2]/td[4]'
+    product_furniture_price = 'td[class="price1"]'
+    product_appliences_price = 'td[class="price1"]'
+    product_home_and_garden_price = 'td[class="price1"]'
 
     quantity_of_product_furniture = '//input[@class="qc-product-qantity form-control text-center"]'
     down_button_furniture = '//*[@id="cart1"]/div/table/tbody/tr[1]/td[3]/div/span[1]/button/i'
@@ -44,29 +46,25 @@ class Checkout_cart_page(Base):
     total_product = '//*[@id="cart1"]/div/table/tbody/tr[6]/td[2]'
     finish_amount = '//*[@id="cart1"]/div/table/tbody/tr[2]/td[2]'
     free_Shipping = '//*[@id="cart1"]/div/table/tbody/tr[3]/td[2]'   # must be equal 0
-
     reward_field = '//input[@name="reward"]'
-
-
-    first_name = '//*[@id="input-payment-firstname"]'
-    last_name = '//*[@id="input-payment-lastname"]'
-    Phone = '//*[@id="input-payment-telephone"]'
-    Address = '//*[@id="input-payment-address-1"]'
-
-    checkout_word = '//*[@id="payment-method"]/div[1]'
+    first_name = '//input[@id="input-payment-firstname"]'
+    last_name = '//input[@id="input-payment-lastname"]'
+    Phone = '//input[@id="input-payment-telephone"]'
+    Address = '//input[@id="input-payment-address-1"]'
+    checkout_word = 'div[class="quickcheckout-heading"]'
 
 
     #getters
 
     def get_cart_selected_product_furniture(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                self.cart_selected_product_furniture)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.cart_selected_product_furniture)
     def get_cart_selected_product_appliences(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                self.cart_selected_product_appliences)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.cart_selected_product_appliences)
     def get_cart_selected_product_home_and_garden(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable
-                                                    ((By.XPATH, self.cart_selected_product_home_and_garden)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.cart_selected_product_home_and_garden)
     def get_quantity_of_product (self):
         return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH,
                                                                                 self.quantity_of_product_furniture)))
@@ -94,52 +92,57 @@ class Checkout_cart_page(Base):
     def get_Address(self):
         return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.Address)))
     def get_checkout_word(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.checkout_word)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.checkout_word)
 
     def get_product_furniture_price(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                self.product_furniture_price)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.product_furniture_price)
     def get_product_appliences_price(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH,
-                                                                                self.product_appliences_price)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.product_appliences_price)
     def get_product_home_and_garden_price(self):
-        return WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.XPATH, self.
-                                                                                product_home_and_garden_price)))
+        time.sleep(5)
+        return self.driver.find_elements(By.CSS_SELECTOR, self.product_home_and_garden_price)
 
     # actions
 
     def value_cart_selected_product_furniture(self):
-        print(self.get_cart_selected_product_furniture().text)
+        time.sleep(3)
+        return self.get_cart_selected_product_furniture()[3]
     def value_cart_selected_product_appliences(self):
-        print(self.get_cart_selected_product_appliences().text)
+        time.sleep(3)
+        return self.get_cart_selected_product_appliences()[3]
     def value_cart_selected_product_home_and_garden(self):
-        print(self.get_cart_selected_product_home_and_garden().text)
+        time.sleep(3)
+        return self.get_cart_selected_product_home_and_garden()[3]
     def click_quantity_of_product(self):
-        print(self.get_quantity_of_product().text)
+        return self.get_quantity_of_product().text
     def click_remove_button_product(self):
-        print( self.get_remove_button_product().text)
+        return self.get_remove_button_product().text
     def click_down_button(self):
-        print (self.get_down_button().text)
+        return self.get_down_button().text
     def click_up_button(self):
-        print(self.get_up_button().text)
+        return self.get_up_button().text
     def value_product_furniture_price(self):
-        print(self.get_product_furniture_price().text)
+        return self.get_product_furniture_price()[1]
     def value_product_appliences_price(self):
-        print(self.get_product_appliences_price().text)
+        return self.get_product_appliences_price()[3]
     def value_product_home_and_garden(self):
-        print(self.get_product_home_and_garden_price().text)
+        return self.get_product_home_and_garden_price()[2]
     def value_total_product(self):
         return self.get_total_product().text
     def value_checkout_word(self):
-        print(self.get_checkout_word().text)
+        return self.get_checkout_word()[3]
     def click_finish_amount(self):
-        print(self.get_finish_amount().text)
+        return self.get_finish_amount().text
     def click_free_Shipping(self):
-        print(self.get_free_Shipping().text)
+        return self.get_free_Shipping().text
     def click_reward_field(self):
-        print(self.get_reward_field().text)
         self.get_reward_field().click()
         self.get_reward_field().send_keys("successfully")
+        time.sleep(5)
+        return self.get_reward_field().text
     def input_first_name(self, first_name_1):
         self.get_first_name().clear()
         self.get_first_name().click()
@@ -157,12 +160,16 @@ class Checkout_cart_page(Base):
         self.get_Address().click()
         self.get_Address().send_keys(Address_1)
 
+     # Methods
+
     def create_dict_finish(self):
         finish_dict = {}
-        locators_products = [self.cart_selected_product_furniture, self.cart_selected_product_appliences,
-                             self.cart_selected_product_home_and_garden]
-        locators_price = [self.product_furniture_price, self.product_appliences_price,
-                          self.product_home_and_garden_price]
+        locators_products = [self.value_cart_selected_product_furniture(),
+                             self.value_cart_selected_product_appliences(),
+                             self.value_cart_selected_product_home_and_garden()]
+        locators_price = [self.value_product_furniture_price(),
+                          self.value_product_appliences_price(),
+                          self.value_product_home_and_garden()]
         for element in range(len(locators_products)):
             product = self.check_locators_products(locators_products[element])
             price = self.check_locators_products(locators_price[element])
@@ -174,9 +181,10 @@ class Checkout_cart_page(Base):
         return finish_dict
 
     def entering_personal_data(self):
+        print('start entering_personal_data')
         self.value_checkout_word()
         self.assert_url('https://vega.ge/en/checkout-en/')
-        self.assert_word(self.checkout_word, 'Payment Method')
+        self.assert_word(self.get_checkout_word()[3], 'Payment Method')
         time.sleep(2)
         self.input_first_name('first_name')
         self.input_last_name('last_name')
@@ -185,6 +193,7 @@ class Checkout_cart_page(Base):
         print('entering_personal_data - done')
 
     def entering_all_product_data(self):
+        print('start entering_all_product_data')
         self.click_quantity_of_product()
         for i in range(2):
             self.click_down_button()
@@ -198,6 +207,8 @@ class Checkout_cart_page(Base):
         finish_dict = self.create_dict_finish()
         self.get_screenshot()
         value_total_product = self.value_total_product().replace('₾', '').replace(' ', '')
+        print(finish_dict, 'finish_dict')
+        print(float(value_total_product), 'float(value_total_product)')
         assert sum(finish_dict.values()) == float(value_total_product)
         print('entering_all_product_data - done')
         return finish_dict

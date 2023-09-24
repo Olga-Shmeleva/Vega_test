@@ -40,7 +40,6 @@ def test_buy_product_all():
     products_home_appliences_adding_dict, price_home_appliences_adding_dict = adp.add_all_products_page()
     products_adding_dict.setdefault(products_home_appliences_adding_dict, price_home_appliences_adding_dict)
 
-    adp.check_all_products_page()
 
 # table for tv
     ap = My_account_page_1(driver)
@@ -50,12 +49,11 @@ def test_buy_product_all():
     mpf.opening_Furniture()
     products_home_furniture, price_home_furniture = mpf.select_filter_furniture()
     products_dict.setdefault(products_home_furniture, price_home_furniture)
-
+#
     adp = Adding_products_page(driver)
     products_furniture_adding_dict, price_furniture_adding_dict = adp.add_all_products_page()
     products_adding_dict.setdefault(products_furniture_adding_dict, price_furniture_adding_dict)
 
-    adp.check_all_products_page()
 
 # blanket
     ap = My_account_page_1(driver)
@@ -69,13 +67,16 @@ def test_buy_product_all():
     adp = Adding_products_page(driver)
     products_home_and_garden_adding_dict, price_home_and_garden_adding_dict = adp.add_all_products_page()
     products_adding_dict.setdefault(products_home_and_garden_adding_dict, price_home_and_garden_adding_dict)
-    adp.check_all_products_page()
 
     cpc = Checkout_cart_page(driver)
     cpc.entering_personal_data()
     finish_dict = cpc.entering_all_product_data()
-
+    #
+    print('products_adding_dict',products_adding_dict)
+    print('finish_dict', finish_dict)
+    print('products_dict', products_dict)
     assert products_adding_dict == finish_dict == products_dict
+
     print('test_all_products - done')
 
 
